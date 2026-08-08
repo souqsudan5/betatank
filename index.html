@@ -828,8 +828,8 @@
 
     <!-- JavaScript Core Logic -->
     <script>
-        let SUPABASE_URL = "https://bvcaxecwvwlhyxswbhjf.supabase.co/"; 
-        let SUPABASE_ANON_KEY = "sb_publishable_XS08dmnOfUsPJH709YLnQw_n-H-kmvv";
+        let SUPABASE_URL = "https://fskvcgujyanncmlcdnwu.supabase.co/"; 
+        let SUPABASE_ANON_KEY = "sb_publishable_pjksL0puTSIi59aArwNXng_hdMz4tZx";
         let currentUSD_Rate = parseFloat(localStorage.getItem('erp_exchange_rate')) || 5800;
         let supabaseClient = null;
         let offlineQueue = JSON.parse(localStorage.getItem('erp_offline_queue')) || [];
@@ -894,26 +894,21 @@
             if(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase) {
                 try {
                     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-                    // لا تتم مزامنة البيانات قبل تسجيل الدخول
-                    window.addEventListener('online', () => {
-                        if (activeUser && navigator.onLine) {
-                            syncWithCloud();
-                        }
-                    });
+                    syncWithCloud();
+                    
+                    window.addEventListener('online', () => syncWithCloud());
                     window.addEventListener('offline', () => {
                         document.getElementById('status-text').innerText = "وضع أوفلاين (Local Cache)";
                         document.getElementById('status-dot').className = "w-2.5 h-2.5 bg-amber-500 rounded-full";
                     });
 
-                    // المزامنة التلقائية فقط بعد تسجيل الدخول
                     setInterval(() => {
-                        if(!activeUser || !navigator.onLine) return;
-
-                        if(offlineQueue.length > 0) {
-                            processOfflineQueue();
-                        } else {
-                            syncWithCloud();
+                        if(navigator.onLine) {
+                            if(offlineQueue.length > 0) {
+                                processOfflineQueue();
+                            } else {
+                                syncWithCloud();
+                            }
                         }
                     }, 3000);
                 } catch(e) {
@@ -948,9 +943,7 @@
             SUPABASE_ANON_KEY = key;
             initSupabase();
             closeConfigModal();
-            if (activeUser) {
-                syncWithCloud();
-            }
+            syncWithCloud();
         }
 
         function updateQueueBadge() {
@@ -1189,7 +1182,9 @@
                 }
 
                 if (activeUser) {
-                    activeUser = mapEmailToUser(activeUser.email || activeUser.username);
+                    const mapped = mapEmailToUser(activeUser.email || activeUser.username);
+                    if (mapped) activeUser = mapped;
+                    localStorage.setItem('erp_active_user', JSON.stringify(activeUser));
                     applyUserPermissions();
                 }
 
@@ -1431,7 +1426,9 @@
                     }
                 } catch(e) {}
                 
-                activeUser = mapEmailToUser(data.user.email);
+                const mapped = mapEmailToUser(data.user.email);
+                if (mapped) activeUser = mapped;
+                localStorage.setItem('erp_active_user', JSON.stringify(activeUser));
                 document.getElementById('login-modal').classList.add('hidden');
                 applyUserPermissions();
                 syncWithCloud();
@@ -1466,6 +1463,7 @@
         async function logout() {
             if (supabaseClient) await supabaseClient.auth.signOut();
             activeUser = null;
+            localStorage.removeItem('erp_active_user');
             permissionsApplied = false;
             document.getElementById('login-modal').classList.remove('hidden');
             document.getElementById('login-email').value = '';
