@@ -2381,37 +2381,91 @@
             tbody.innerHTML = rowsHTML;
         }
 
-        window.deleteProduct = function(id) {
-            if (!hasPerm('manage-inventory')) {
-                showCustomModal("تنبيه", "ليس لديك صلاحية لحذف المنتجات!", "danger");
-                return;
-            }
+       window.deleteProduct = function(id) {
+    if (!hasPerm('manage-inventory')) {
+        showCustomModal("تنبيه", "ليس لديك صلاحية لحذف المنتجات!", "danger");
+        return;
+    }
 
-            const targetIndex = products.findIndex(p => p.id === id);
-            if(targetIndex === -1) return;
-            const targetProd = products[targetIndex];
+    // توحيد نوع ID حتى يعمل الحذف مع المنتجات القديمة والجديدة
+    const targetIndex = products.findIndex(
+        p => String(p.id) === String(id)
+    );
 
-            showCustomModal("تأكيد الحذف", `هل أنت متأكد من حذف المنتج (${targetProd.name}) نهائياً؟`, "danger", async () => {
-                products.splice(targetIndex, 1);
-                saveDataToStorage();
-                renderInventory();
-                renderPOSCatalog();
+    if (targetIndex === -1) {
+        showCustomModal(
+            "خطأ",
+            "لم يتم العثور على المنتج المراد حذفه.",
+            "danger"
+        );
+        return;
+    }
 
-                if (supabaseClient && navigator.onLine) {
-                    try {
-                        await supabaseClient.from('products').delete().eq('id', id);
-                    } catch(err) {
-                        offlineQueue.push({ type: 'product_delete', id: id });
+    const targetProd = products[targetIndex];
+
+    showCustomModal(
+        "تأكيد الحذف",
+        `هل أنت متأكد من حذف المنتج (${targetProd.name}) نهائياً؟`,
+        "danger",
+        async () => {
+
+            // حذف من القائمة الحالية
+            products.splice(targetIndex, 1);
+
+            // حفظ التغيير محلياً
+            saveDataToStorage();
+
+            // تحديث الشاشة
+            renderInventory();
+            renderPOSCatalog();
+
+            // حذف من Supabase
+            if (supabaseClient && navigator.onLine) {
+                try {
+                    const { error } = await supabaseClient
+                        .from('products')
+                        .delete()
+                        .eq('id', id);
+
+                    if (error) {
+                        console.error("خطأ حذف المنتج من Supabase:", error);
+
+                        offlineQueue.push({
+                            type: 'product_delete',
+                            id: id
+                        });
+
                         updateQueueBadge();
                     }
-                } else {
-                    offlineQueue.push({ type: 'product_delete', id: id });
+
+                } catch (err) {
+                    console.error("خطأ حذف المنتج:", err);
+
+                    offlineQueue.push({
+                        type: 'product_delete',
+                        id: id
+                    });
+
                     updateQueueBadge();
                 }
-                showCustomModal("تم الحذف", "تم مسح المنتج من المخزن بنجاح!", "success");
-            });
-        };
 
+            } else {
+                offlineQueue.push({
+                    type: 'product_delete',
+                    id: id
+                });
+
+                updateQueueBadge();
+            }
+
+            showCustomModal(
+                "تم الحذف",
+                "تم حذف المنتج بنجاح.",
+                "success"
+            );
+        }
+    );
+};
         let expensesChartInstance = null;
         function initChart() {
             const canvas = document.getElementById('expensesChart');
