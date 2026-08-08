@@ -101,7 +101,7 @@
                     </div>
 
                     <div style="text-align: center; border-bottom: 1px solid #000; padding-bottom: 10px; margin-bottom: 15px; font-weight: 700; font-size: 14px; direction: rtl; position: relative; z-index: 1;">
-                        بورتسودان ديم مدينة غرب - جوار نادي البجا - هاتف : 09199049952 - 011143145
+                         ديم مدينة غرب - جوار نادي   البجا - هاتف : 0919904952 - 0111432145
                     </div>
 
                     <div style="display: flex; justify-content: space-between; align-items: center; font-weight: bold; margin-bottom: 15px; position: relative; z-index: 1;">
@@ -2609,7 +2609,7 @@
                         loans: newEmp.loans
                     }]);
                 } catch(err) {
-                    offlineQueue.push({ type: 'employee_add', data: { ...newEmp, hire_date: newEmp.hireDate } });
+                    offlineQueue.push({ type: 'employee_add', data: { ...newEmp, hire_date: newEmp.hireDate, job_title: newEmp.jobTitle } });
                     updateQueueBadge();
                 }
             } else {
@@ -2649,11 +2649,15 @@
         function populateEmployeeDropdowns() {
             const select = document.getElementById('new-user-employee');
             if(!select) return;
+            const currentValue = select.value;
             select.innerHTML = '<option value="">اختر الموظف...</option>';
             if(typeof employeesDatabase !== 'undefined' && employeesDatabase) {
                 employeesDatabase.forEach(emp => {
                     select.innerHTML += `<option value="${emp.id}">${emp.name}</option>`;
                 });
+            }
+            if (currentValue) {
+                select.value = currentValue;
             }
         }
 
