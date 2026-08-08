@@ -702,6 +702,10 @@
                                     <input type="checkbox" name="permissions" value="tab-inventory" class="w-4 h-4 text-indigo-600 rounded">
                                     <span class="text-slate-700 font-semibold">المخزون والتسعير</span>
                                 </label>
+								<label class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg cursor-pointer transition">
+    <input type="checkbox" name="permissions" value="manage-inventory" class="w-4 h-4 text-indigo-600 rounded">
+    <span class="text-slate-700 font-semibold">إدارة المخزون (إضافة وحذف المنتجات)</span>
+</label>
                                 <label class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg cursor-pointer transition">
                                     <input type="checkbox" name="permissions" value="tab-employees" class="w-4 h-4 text-indigo-600 rounded">
                                     <span class="text-slate-700 font-semibold">قسم الموظفين (HR)</span>
@@ -1251,16 +1255,33 @@
         let systemUsers = JSON.parse(localStorage.getItem('erp_users')) || [];
 
         function hasPerm(tabId) {
-            if (isUserAdminOrGM()) return true;
-            const allowedTabs = (activeUser && activeUser.permissions) ? activeUser.permissions : [];
-            return allowedTabs.includes(tabId) || 
-                   allowedTabs.includes(tabId.replace('tab-', '')) || 
-                   (tabId === 'tab-calc' && allowedTabs.includes('calculations')) || 
-                   (tabId === 'tab-db' && allowedTabs.includes('database')) || 
-                   (tabId === 'tab-customers' && allowedTabs.includes('customers')) || 
-                   (tabId === 'tab-inventory' && allowedTabs.includes('inventory')) || 
-                   (tabId === 'tab-employees' && allowedTabs.includes('employees')) || 
-                   (tabId === 'tab-expenses' && allowedTabs.includes('expenses'));
+    if (isUserAdminOrGM()) return true;
+
+    const allowedTabs = (activeUser && activeUser.permissions)
+        ? activeUser.permissions
+        : [];
+
+    // صلاحية المخزون تشمل إدارة المخزون
+    if (
+        tabId === 'manage-inventory' &&
+        (
+            allowedTabs.includes('manage-inventory') ||
+            allowedTabs.includes('tab-inventory') ||
+            allowedTabs.includes('inventory')
+        )
+    ) {
+        return true;
+    }
+
+    return allowedTabs.includes(tabId) ||
+           allowedTabs.includes(tabId.replace('tab-', '')) ||
+           (tabId === 'tab-calc' && allowedTabs.includes('calculations')) ||
+           (tabId === 'tab-db' && allowedTabs.includes('database')) ||
+           (tabId === 'tab-customers' && allowedTabs.includes('customers')) ||
+           (tabId === 'tab-inventory' && allowedTabs.includes('inventory')) ||
+           (tabId === 'tab-employees' && allowedTabs.includes('employees')) ||
+           (tabId === 'tab-expenses' && allowedTabs.includes('expenses'));
+
         }
 
         function isUserAdminOrGM() {
@@ -2274,7 +2295,8 @@
 
         async function addNewProductUnified(e) {
             e.preventDefault();
-            if (!hasPerm('manage-inventory')) {
+            if (!hasPerm('manage-inventory'))
+			{
                 showCustomModal("تنبيه", "ليس لديك صلاحية لإضافة منتجات!", "danger");
                 return;
             }
@@ -2381,13 +2403,18 @@
             tbody.innerHTML = rowsHTML;
         }
 
-       window.deleteProduct = function(id) {
-    if (!hasPerm('manage-inventory')) {
-        showCustomModal("تنبيه", "ليس لديك صلاحية لحذف المنتجات!", "danger");
+window.deleteProduct = function(id) {
+    // السماح لمن لديه صلاحية المخزون أو إدارة المخزون
+    if (!hasPerm('manage-inventory') && !hasPerm('tab-inventory')) {
+        showCustomModal(
+            "تنبيه",
+            "ليس لديك صلاحية لحذف المنتجات!",
+            "danger"
+        );
         return;
     }
 
-    // توحيد نوع ID حتى يعمل الحذف مع المنتجات القديمة والجديدة
+    // توحيد نوع ID للمنتجات القديمة والجديدة
     const targetIndex = products.findIndex(
         p => String(p.id) === String(id)
     );
@@ -2409,13 +2436,13 @@
         "danger",
         async () => {
 
-            // حذف من القائمة الحالية
+            // حذف من القائمة المحلية
             products.splice(targetIndex, 1);
 
-            // حفظ التغيير محلياً
+            // حفظ التغييرات
             saveDataToStorage();
 
-            // تحديث الشاشة
+            // تحديث الصفحات
             renderInventory();
             renderPOSCatalog();
 
@@ -2428,7 +2455,10 @@
                         .eq('id', id);
 
                     if (error) {
-                        console.error("خطأ حذف المنتج من Supabase:", error);
+                        console.error(
+                            "خطأ حذف المنتج من Supabase:",
+                            error
+                        );
 
                         offlineQueue.push({
                             type: 'product_delete',
@@ -2439,7 +2469,10 @@
                     }
 
                 } catch (err) {
-                    console.error("خطأ حذف المنتج:", err);
+                    console.error(
+                        "خطأ حذف المنتج:",
+                        err
+                    );
 
                     offlineQueue.push({
                         type: 'product_delete',
@@ -2448,7 +2481,6 @@
 
                     updateQueueBadge();
                 }
-
             } else {
                 offlineQueue.push({
                     type: 'product_delete',
