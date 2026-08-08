@@ -361,14 +361,6 @@
                             <div id="cart-items-wrapper" class="space-y-2 max-h-[300px] overflow-y-auto pr-1"></div>
                         </div>
                         <div class="border-t border-slate-200 pt-4 space-y-3">
-                            <div class="bg-white border border-slate-200 p-3 rounded-2xl">
-                                <label class="block text-xs font-bold text-slate-700 mb-2">طريقة الدفع</label>
-                                <select id="invoice-payment-method" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <option value="cash">نقدي</option>
-                                    <option value="bank">بنك</option>
-                                    <option value="credit">آجل</option>
-                                </select>
-                            </div>
                             <div class="bg-slate-900 text-white p-4 rounded-2xl flex justify-between items-center shadow-md">
                                 <div>
                                     <span class="text-xs text-indigo-300 block font-bold">المبلغ الإجمالي</span>
@@ -675,54 +667,36 @@
                         </div>
                         
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                             <label class="block text-xs font-bold mb-3 text-slate-800"><i class="fa-solid fa-list-check text-indigo-500"></i> تحديد الصلاحيات:</label>
-                             <div class="space-y-3 max-h-64 overflow-y-auto pr-2 custom-scrollbar text-xs">
-                                <div class="font-extrabold text-indigo-700">الفواتير</div>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <label><input type="checkbox" name="permissions" value="invoices.view"> عرض</label>
-                                    <label><input type="checkbox" name="permissions" value="invoices.create"> إضافة</label>
-                                    <label><input type="checkbox" name="permissions" value="invoices.edit"> تعديل</label>
-                                    <label><input type="checkbox" name="permissions" value="invoices.delete"> حذف</label>
-                                </div>
-                                <div class="font-extrabold text-indigo-700">المنتجات والمخزون</div>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <label><input type="checkbox" name="permissions" value="products.view"> عرض</label>
-                                    <label><input type="checkbox" name="permissions" value="products.create"> إضافة</label>
-                                    <label><input type="checkbox" name="permissions" value="products.edit"> تعديل</label>
-                                    <label><input type="checkbox" name="permissions" value="products.delete"> حذف</label>
-                                </div>
-                                <div class="font-extrabold text-indigo-700">المنصرفات</div>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <label><input type="checkbox" name="permissions" value="expenses.view"> عرض</label>
-                                    <label><input type="checkbox" name="permissions" value="expenses.create"> إضافة</label>
-                                    <label><input type="checkbox" name="permissions" value="expenses.edit"> تعديل</label>
-                                    <label><input type="checkbox" name="permissions" value="expenses.delete"> حذف</label>
-                                </div>
-                                <div class="font-extrabold text-indigo-700">الموظفون</div>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <label><input type="checkbox" name="permissions" value="employees.view"> عرض</label>
-                                    <label><input type="checkbox" name="permissions" value="employees.create"> إضافة</label>
-                                    <label><input type="checkbox" name="permissions" value="employees.edit"> تعديل</label>
-                                    <label><input type="checkbox" name="permissions" value="employees.delete"> حذف</label>
-                                </div>
-                                <div class="font-extrabold text-indigo-700">المستخدمون</div>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <label><input type="checkbox" name="permissions" value="users.view"> عرض</label>
-                                    <label><input type="checkbox" name="permissions" value="users.create"> إضافة</label>
-                                    <label><input type="checkbox" name="permissions" value="users.edit"> تعديل</label>
-                                    <label><input type="checkbox" name="permissions" value="users.delete"> حذف</label>
-                                </div>
-                                <div class="font-extrabold text-indigo-700">التقارير والإعدادات</div>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <label><input type="checkbox" name="permissions" value="reports.view"> التقارير</label>
-                                    <label><input type="checkbox" name="permissions" value="dashboard.view"> لوحة التحكم</label>
-                                    <label><input type="checkbox" name="permissions" value="settings.view"> إعدادات عرض</label>
-                                    <label><input type="checkbox" name="permissions" value="settings.edit"> تعديل الإعدادات</label>
-                                </div>
-                             </div>
-                         </div>
-                         
-                         <button type="submit" id="btn-create-user" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl font-bold transition text-sm flex items-center justify-center gap-2 shadow-md shadow-indigo-600/20">
+                            <label class="block text-xs font-bold mb-3 text-slate-800"><i class="fa-solid fa-list-check text-indigo-500"></i> تحديد الصلاحيات والشاشات المسموحة:</label>
+                            <div class="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar text-sm">
+                                <label class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg cursor-pointer transition">
+                                    <input type="checkbox" name="permissions" value="tab-customers" class="w-4 h-4 text-indigo-600 rounded">
+                                    <span class="text-slate-700 font-semibold">شاشة المبيعات (POS)</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg cursor-pointer transition">
+                                    <input type="checkbox" name="permissions" value="tab-db" class="w-4 h-4 text-indigo-600 rounded">
+                                    <span class="text-slate-700 font-semibold">سجل المبيعات والتعديل</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg cursor-pointer transition">
+                                    <input type="checkbox" name="permissions" value="tab-calc" class="w-4 h-4 text-indigo-600 rounded">
+                                    <span class="text-slate-700 font-semibold">العمليات الحسابية والصافي</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg cursor-pointer transition">
+                                    <input type="checkbox" name="permissions" value="tab-expenses" class="w-4 h-4 text-indigo-600 rounded">
+                                    <span class="text-slate-700 font-semibold">المنصرفات والرواتب</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg cursor-pointer transition">
+                                    <input type="checkbox" name="permissions" value="tab-inventory" class="w-4 h-4 text-indigo-600 rounded">
+                                    <span class="text-slate-700 font-semibold">المخزون والتسعير</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg cursor-pointer transition">
+                                    <input type="checkbox" name="permissions" value="tab-employees" class="w-4 h-4 text-indigo-600 rounded">
+                                    <span class="text-slate-700 font-semibold">قسم الموظفين (HR)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="btn-create-user" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl font-bold transition text-sm flex items-center justify-center gap-2 shadow-md shadow-indigo-600/20">
                             <i class="fa-solid fa-plus"></i> إنشاء الحساب
                         </button>
                     </form>
@@ -854,21 +828,11 @@
 
     <!-- JavaScript Core Logic -->
     <script>
-        let SUPABASE_URL = "https://fskvcgujyanncmlcdnwu.supabase.co/"; 
-        let SUPABASE_ANON_KEY = "sb_publishable_pjksL0puTSIi59aArwNXng_hdMz4tZx";
-        const ERP_SCHEMA_VERSION = '2';
-        if (localStorage.getItem('erp_schema_version') !== ERP_SCHEMA_VERSION) {
-            localStorage.removeItem('erp_offline_queue');
-            localStorage.removeItem('erp_database');
-            localStorage.removeItem('erp_products');
-            localStorage.removeItem('erp_expenses');
-            localStorage.removeItem('erp_employees');
-            localStorage.removeItem('erp_users');
-            localStorage.setItem('erp_schema_version', ERP_SCHEMA_VERSION);
-        }
+        let SUPABASE_URL = "https://bvcaxecwvwlhyxswbhjf.supabase.co/"; 
+        let SUPABASE_ANON_KEY = "sb_publishable_XS08dmnOfUsPJH709YLnQw_n-H-kmvv";
         let currentUSD_Rate = parseFloat(localStorage.getItem('erp_exchange_rate')) || 5800;
         let supabaseClient = null;
-        let offlineQueue = [];
+        let offlineQueue = JSON.parse(localStorage.getItem('erp_offline_queue')) || [];
         let isSubmittingInvoice = false;
 
         function isUserAdminOrGM() {
@@ -897,10 +861,6 @@
         }
 
         function saveExchangeRateFromInventory() {
-            if (!hasPerm('settings.edit')) {
-                showCustomModal("تنبيه", "ليس لديك صلاحية تعديل سعر الصرف.", "danger");
-                return;
-            }
             const inputVal = parseFloat(document.getElementById('inv-exchange-rate-input').value);
             if (!inputVal || inputVal <= 0) {
                 showCustomModal("تنبيه", "يرجى إدخال سعر صرف صحيح لليوم!", "danger");
@@ -934,19 +894,26 @@
             if(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase) {
                 try {
                     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    window.addEventListener('online', () => syncWithCloud());
+
+                    // لا تتم مزامنة البيانات قبل تسجيل الدخول
+                    window.addEventListener('online', () => {
+                        if (activeUser && navigator.onLine) {
+                            syncWithCloud();
+                        }
+                    });
                     window.addEventListener('offline', () => {
                         document.getElementById('status-text').innerText = "وضع أوفلاين (Local Cache)";
                         document.getElementById('status-dot').className = "w-2.5 h-2.5 bg-amber-500 rounded-full";
                     });
 
+                    // المزامنة التلقائية فقط بعد تسجيل الدخول
                     setInterval(() => {
-                        if(navigator.onLine) {
-                            if(offlineQueue.length > 0) {
-                                processOfflineQueue();
-                            } else {
-                                syncWithCloud();
-                            }
+                        if(!activeUser || !navigator.onLine) return;
+
+                        if(offlineQueue.length > 0) {
+                            processOfflineQueue();
+                        } else {
+                            syncWithCloud();
                         }
                     }, 3000);
                 } catch(e) {
@@ -981,7 +948,9 @@
             SUPABASE_ANON_KEY = key;
             initSupabase();
             closeConfigModal();
-            syncWithCloud();
+            if (activeUser) {
+                syncWithCloud();
+            }
         }
 
         function updateQueueBadge() {
@@ -1012,8 +981,7 @@
                         const { error } = await supabaseClient.from('invoices').delete().eq('inv_id', action.invId);
                         err = error;
                     } else if(action.type === 'product_add') {
-                        const d = action.data;
-                        const { error } = await supabaseClient.from('products').insert([{ id: d.id, name: d.name, size: d.size, factory_sdg: d.factorySDG ?? d.factory_sdg, base_sdg: d.baseSDG ?? d.base_sdg, base_rate: d.baseRate ?? d.base_rate, stock: d.stock, min: d.min }]);
+                        const { error } = await supabaseClient.from('products').insert([action.data]);
                         err = error;
                     } else if(action.type === 'product_update') {
                         const { error } = await supabaseClient.from('products').update(action.data).eq('id', action.id);
@@ -1022,8 +990,7 @@
                         const { error } = await supabaseClient.from('products').delete().eq('id', action.id);
                         err = error;
                     } else if(action.type === 'expense') {
-                        const d = action.data;
-                        const { error } = await supabaseClient.from('expenses').insert([{ id: d.id, type: d.type, amount: d.amount, note: d.note, expense_date: d.period || d.expense_date }]);
+                        const { error } = await supabaseClient.from('expenses').insert([action.data]);
                         err = error;
                     } else if(action.type === 'user_add') {
                         const { error } = await supabaseClient.from('users').upsert([action.data]);
@@ -1032,8 +999,7 @@
                         const { error } = await supabaseClient.from('users').delete().eq('username', action.username);
                         err = error;
                     } else if(action.type === 'employee_add') {
-                        const d = action.data;
-                        const { error } = await supabaseClient.from('employees').upsert([{ id: d.id, name: d.name, phone: d.phone, hire_date: d.hireDate || d.hire_date, job_title: d.jobTitle || d.job_title, salary: d.salary, loans: d.loans || [] }]);
+                        const { error } = await supabaseClient.from('employees').upsert([action.data]);
                         err = error;
                     } else if(action.type === 'employee_update') {
                         const { error } = await supabaseClient.from('employees').update(action.data).eq('id', action.id);
@@ -1057,7 +1023,77 @@
         }
 
         async function forcePushLocalDataToCloud() {
-            showCustomModal("غير متاح", "رفع البيانات القديمة المباشر تم تعطيله لأن قاعدة البيانات الجديدة تستخدم نظام الفواتير متعدد المنتجات. استخدم السحابة الجديدة مباشرة.", "danger");
+            if(!supabaseClient || !navigator.onLine) {
+                showCustomModal("خطأ اتصال", "يجب أن تكون متصلاً بالسحابة والإنترنت لرفع البيانات.", "danger");
+                return;
+            }
+            showCustomModal(
+                "تحذير هام",
+                "هذا الزر سيقوم برفع جميع البيانات المخزنة في جهازك (الفواتير، المنتجات، الموظفين، المنصرفات) إلى السحابة فوراً. استخدم هذا الزر فقط إذا كانت السحابة جديدة وفارغة. هل أنت متأكد؟",
+                "danger",
+                async () => {
+                    document.getElementById('status-text').innerText = "جاري الرفع للسحابة...";
+                    
+                    try {
+                        // Invoices
+                        for (let inv of customerDatabase) {
+                            await supabaseClient.from('invoices').insert([{
+                                inv_id: inv.id,
+                                date: inv.date,
+                                name: inv.name,
+                                phone: inv.phone,
+                                location: inv.location,
+                                product: inv.product,
+                                qty: inv.qty,
+                                factory_total: inv.factoryTotal,
+                                total: inv.total,
+                                profit: inv.profit,
+                                note: inv.note
+                            }]);
+                        }
+                        
+                        // Products
+                        for (let p of products) {
+                            await supabaseClient.from('products').insert([{
+                                name: p.name,
+                                size: p.size,
+                                factory_sdg: p.factorySDG,
+                                base_sdg: p.baseSDG,
+                                base_rate: p.baseRate,
+                                stock: p.stock,
+                                min: p.min
+                            }]);
+                        }
+                        
+                        // Expenses
+                        for (let e of rawExpenses) {
+                            await supabaseClient.from('expenses').insert([{
+                                type: e.type,
+                                amount: e.amount,
+                                note: e.note,
+                                period: e.period,
+                                date: e.period
+                            }]);
+                        }
+                        
+                        // Employees
+                        for (let emp of employeesDatabase) {
+                            await supabaseClient.from('employees').insert([{
+                                name: emp.name,
+                                phone: emp.phone,
+                                hire_date: emp.hireDate,
+                                salary: emp.salary,
+                                loans: emp.loans
+                            }]);
+                        }
+                        
+                        showCustomModal("تم بنجاح", "تم رفع جميع بياناتك المحلية إلى السحابة الجديدة بنجاح!", "success");
+                        syncWithCloud();
+                    } catch (err) {
+                        showCustomModal("خطأ", "حدث خطأ أثناء رفع البيانات: " + err.message, "danger");
+                    }
+                }
+            );
         }
 
         async function syncWithCloud() {
@@ -1072,42 +1108,30 @@
                 await processOfflineQueue();
                 
                 const [invRes, prodRes, expRes, userRes, empRes] = await Promise.all([
-                    supabaseClient.from('invoices').select('*, invoice_items(*)').order('id', { ascending: false }),
+                    supabaseClient.from('invoices').select('*').order('id', { ascending: false }),
                     supabaseClient.from('products').select('*').order('id', { ascending: true }),
                     supabaseClient.from('expenses').select('*').order('id', { ascending: false }),
                     supabaseClient.from('users').select('*'),
                     supabaseClient.from('employees').select('*').order('id', { ascending: true })
                 ]);
-                const queryErrors = [invRes, prodRes, expRes, userRes, empRes].filter(r => r.error);
-                if (queryErrors.length) throw queryErrors[0].error;
 
-                if(!invRes.error) {
-                    customerDatabase = (invRes.data || []).map(item => {
-                        const items = Array.isArray(item.invoice_items) ? item.invoice_items : [];
-                        const product = items.map(x => x.product_name).join(' + ') || '';
-                        const qty = items.reduce((sum, x) => sum + Number(x.quantity || 0), 0);
-                        const factoryTotal = items.reduce((sum, x) => sum + Number(x.factory_price || 0) * Number(x.quantity || 0), 0);
-                        const profit = items.reduce((sum, x) => sum + Number(x.profit || 0), 0);
-                        return {
-                            id: item.inv_id || `#${item.id}`,
-                            date: item.invoice_date || '',
-                            name: item.customer_name || '',
-                            phone: item.customer_phone || '',
-                            location: item.customer_location || '',
-                            product,
-                            qty,
-                            factoryTotal,
-                            total: Number(item.total || 0),
-                            profit,
-                            note: item.note || '',
-                            payment_method: item.payment_method,
-                            status: item.status,
-                            db_id: item.id
-                        };
-                    });
+                if(invRes.data && invRes.data.length > 0) {
+                    customerDatabase = invRes.data.map(item => ({
+                        id: item.inv_id || `#${item.id}`,
+                        date: item.date,
+                        name: item.name,
+                        phone: item.phone,
+                        location: item.location,
+                        product: (item.product || '').replace(/\s*\(\d+\s*ق\)/g, '').trim(),
+                        qty: Number(item.qty) || 1,
+                        factoryTotal: Number(item.factory_total || 0),
+                        total: Number(item.total) || 0,
+                        profit: Number(item.profit) || 0,
+                        note: item.note || ''
+                    }));
                 }
-                if(!prodRes.error) {
-                    products = (prodRes.data || []).map(p => ({
+                if(prodRes.data && prodRes.data.length > 0) {
+                    products = prodRes.data.map(p => ({
                         id: p.id,
                         name: p.name,
                         size: p.size || '',
@@ -1118,8 +1142,8 @@
                         min: Number(p.min) || 5
                     }));
                 }
-                if(!expRes.error) {
-                    rawExpenses = (expRes.data || []).map(e => ({
+                if(expRes.data && expRes.data.length > 0) {
+                    rawExpenses = expRes.data.map(e => ({
                         id: e.id,
                         type: e.type,
                         amount: Number(e.amount) || 0,
@@ -1127,25 +1151,24 @@
                         period: formatDateToYMD(e.period || e.date)
                     }));
                 }
-                if(!userRes.error) {
-                    systemUsers = (userRes.data || []).map(u => ({
+                if(userRes.data && userRes.data.length > 0) {
+                    systemUsers = userRes.data.map(u => ({
                         id: u.id,
                         email: u.email,
                         username: u.email ? u.email.split('@')[0] : '',
-                        permissions: normalizePermissions(u.permissions),
+                        permissions: typeof u.permissions === 'string' ? JSON.parse(u.permissions || '[]') : (u.permissions || []),
                         roleName: u.role_name || 'مستخدم مخصص',
                         employee_id: u.employee_id,
                         created_at: u.created_at
                     }));
                 }
-                if(!empRes.error) {
-                    employeesDatabase = (empRes.data || []).map(e => ({
+                if(empRes.data && empRes.data.length > 0) {
+                    employeesDatabase = empRes.data.map(e => ({
                         id: e.id,
                         name: e.name,
                         phone: e.phone,
                         hireDate: e.hireDate || e.hire_date,
                         salary: Number(e.salary) || 0,
-                        jobTitle: e.job_title || '',
                         loans: typeof e.loans === 'string' ? JSON.parse(e.loans || '[]') : (e.loans || [])
                     }));
                 }
@@ -1219,61 +1242,39 @@
         let employeesDatabase = JSON.parse(localStorage.getItem('erp_employees')) || [];
         let systemUsers = JSON.parse(localStorage.getItem('erp_users')) || [];
 
-        function normalizePermissions(raw) {
-            if (!raw) return {};
-            if (typeof raw === 'string') {
-                try { raw = JSON.parse(raw); } catch (_) { return {}; }
-            }
-            if (Array.isArray(raw)) {
-                const obj = {};
-                raw.forEach(p => { if (p) obj[p] = true; });
-                return obj;
-            }
-            return raw;
-        }
-
-        function permissionsCount(raw) {
-            return Object.values(normalizePermissions(raw)).filter(Boolean).length;
+        function hasPerm(tabId) {
+            if (isUserAdminOrGM()) return true;
+            const allowedTabs = (activeUser && activeUser.permissions) ? activeUser.permissions : [];
+            return allowedTabs.includes(tabId) || 
+                   allowedTabs.includes(tabId.replace('tab-', '')) || 
+                   (tabId === 'tab-calc' && allowedTabs.includes('calculations')) || 
+                   (tabId === 'tab-db' && allowedTabs.includes('database')) || 
+                   (tabId === 'tab-customers' && allowedTabs.includes('customers')) || 
+                   (tabId === 'tab-inventory' && allowedTabs.includes('inventory')) || 
+                   (tabId === 'tab-employees' && allowedTabs.includes('employees')) || 
+                   (tabId === 'tab-expenses' && allowedTabs.includes('expenses'));
         }
 
         function isUserAdminOrGM() {
-            return !!activeUser && (activeUser.roleName === 'admin' || activeUser.roleName === 'مدير عام');
-        }
-
-        function hasPerm(permission) {
-            if (isUserAdminOrGM()) return true;
-            const perms = normalizePermissions(activeUser && activeUser.permissions);
-            const aliases = {
-                'tab-customers': ['invoices.view', 'invoices.create'],
-                'tab-db': ['invoices.view'],
-                'tab-calc': ['reports.view'],
-                'tab-expenses': ['expenses.view'],
-                'tab-inventory': ['products.view'],
-                'tab-clientprofiles': ['invoices.view'],
-                'tab-employees': ['employees.view'],
-                'tab-users': ['users.view'],
-                'manage-inventory': ['products.create', 'products.edit', 'products.delete'],
-                'manage-expenses': ['expenses.create', 'expenses.edit', 'expenses.delete'],
-                'manage-employees': ['employees.create', 'employees.edit', 'employees.delete'],
-                'admin-panel': ['users.create', 'users.edit', 'users.delete']
-            };
-            if (perms[permission] === true) return true;
-            return (aliases[permission] || []).some(p => perms[p] === true);
+            return activeUser && (activeUser.username === 'admin' || activeUser.email === 'admin@beta.com');
         }
 
         function mapEmailToUser(email) {
             const dbUser = (systemUsers || []).find(u => u.email === email || u.username === email);
             if(dbUser) {
                 return {
-                    id: dbUser.id,
                     username: email.split('@')[0],
-                    email,
-                    roleName: dbUser.roleName || dbUser.role_name || 'مستخدم',
-                    permissions: normalizePermissions(dbUser.permissions),
+                    email: email,
+                    roleName: dbUser.roleName || dbUser.role_name,
+                    permissions: dbUser.permissions,
                     employee_id: dbUser.employee_id
                 };
             }
-            return { username: email.split('@')[0], email, roleName: 'مستخدم', permissions: {} };
+
+            if(email === 'admin@beta.com') return { username: 'admin', email, roleName: 'مدير عام', permissions: ['tab-customers','tab-db','tab-calc','tab-expenses','tab-inventory','tab-employees'] };
+            if(email === 'accountant@beta.com') return { username: 'accountant', email, roleName: 'محاسب', permissions: ['tab-expenses','tab-db','tab-calc'] };
+            if(email === 'store@beta.com') return { username: 'store', email, roleName: 'أمين مخزن', permissions: ['tab-inventory'] };
+            return { username: email.split('@')[0], email, roleName: 'مستخدم', permissions: [] };
         }
 
         let activeCart = [];
@@ -1340,7 +1341,7 @@
             }
             document.getElementById('user-role-badge').innerText = `${displayName} (${activeUser.email || activeUser.username})`;
 
-            const allowedTabs = normalizePermissions(activeUser.permissions);
+            const allowedTabs = activeUser.permissions || [];
             
 
             document.getElementById('btn-customers').style.display = hasPerm('tab-customers') ? 'flex' : 'none';
@@ -1349,15 +1350,15 @@
             const isCalcAllowed = hasPerm('tab-calc') || isUserAdminOrGM();
             document.getElementById('btn-calculations').style.display = isCalcAllowed ? 'flex' : 'none';
             
-            document.getElementById('btn-clientprofiles').style.display = hasPerm('tab-clientprofiles') || allowedTabs['invoices.view'] === true ? 'flex' : 'none';
+            document.getElementById('btn-clientprofiles').style.display = hasPerm('tab-clientprofiles') || allowedTabs.includes('clientprofiles') ? 'flex' : 'none';
             document.getElementById('btn-expenses').style.display = hasPerm('tab-expenses') ? 'flex' : 'none';
             document.getElementById('btn-inventory').style.display = hasPerm('tab-inventory') ? 'flex' : 'none';
             
             const btnEmployees = document.getElementById('btn-employees');
             if(btnEmployees) btnEmployees.style.display = hasPerm('tab-employees') ? 'flex' : 'none';
             
-            const isPureAdmin = isUserAdminOrGM();
-            document.getElementById('btn-users').style.display = hasPerm('users.view') ? 'flex' : 'none';
+            const isPureAdmin = activeUser.username === 'admin' || activeUser.email === 'admin@beta.com';
+            document.getElementById('btn-users').style.display = isPureAdmin ? 'flex' : 'none';
 
             // Click the first available tab ONLY on initial login
             if(!permissionsApplied) {
@@ -1395,9 +1396,31 @@
             btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> دخول النظام';
             btn.disabled = false;
 
+            let finalError = error;
             if (error) {
-                showCustomModal("خطأ في الدخول", "البريد الإلكتروني أو كلمة السر غير صحيحة!", "danger");
-                return;
+                if (email === 'admin@beta.com' && error.message.toLowerCase().includes('invalid login credentials')) {
+                    const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({ email, password });
+                    
+                    if (!signUpError && signUpData && signUpData.user) {
+                        const newUserRecord = {
+                            id: signUpData.user.id,
+                            email: email,
+                            role_name: 'مدير عام',
+                            permissions: JSON.stringify(['tab-customers','tab-db','tab-calc','tab-expenses','tab-inventory','tab-employees','manage-inventory','manage-expenses','manage-employees','admin-panel']),
+                            created_at: new Date().toISOString()
+                        };
+                        await supabaseClient.from('users').insert([newUserRecord]);
+                        
+                        data.user = signUpData.user;
+                        finalError = null; 
+                    } else {
+                        showCustomModal("خطأ", "لا يمكن إنشاء حساب الإدمن الافتراضي: " + (signUpError?.message || ""), "danger");
+                        return;
+                    }
+                } else {
+                    showCustomModal("خطأ في الدخول", "البريد الإلكتروني أو كلمة السر غير صحيحة!", "danger");
+                    return;
+                }
             }
 
             if (data.user) {
@@ -1411,7 +1434,7 @@
                 activeUser = mapEmailToUser(data.user.email);
                 document.getElementById('login-modal').classList.add('hidden');
                 applyUserPermissions();
-                await syncWithCloud();
+                syncWithCloud();
             }
         }
 
@@ -2103,11 +2126,7 @@
         }
 
         async function generateInvoice() {
-            if (isSubmittingInvoice) return;
-            if (!hasPerm('invoices.create')) {
-                showCustomModal("تنبيه", "ليس لديك صلاحية إنشاء الفواتير!", "danger");
-                return;
-            }
+            if (isSubmittingInvoice) return; 
             if (activeCart.length === 0) {
                 showCustomModal("تنبيه", "السلة فارغة!", "danger");
                 return;
@@ -2116,127 +2135,112 @@
             const nameVal = document.getElementById('c-name').value.trim();
             const phoneVal = document.getElementById('c-phone').value.trim();
             const locVal = document.getElementById('c-location').value.trim();
-            const paymentMethod = document.getElementById('invoice-payment-method').value;
 
             if (!nameVal || !phoneVal) {
                 showCustomModal("تنبيه", "يرجى إدخال اسم العميل ورقم الهاتف!", "danger");
                 return;
             }
-            if (!supabaseClient || !navigator.onLine) {
-                showCustomModal("الاتصال مطلوب", "إتمام الفاتورة يحتاج اتصالاً بالإنترنت حتى يتم خصم المخزون وحفظ الفاتورة بشكل آمن.", "danger");
-                return;
+
+            isSubmittingInvoice = true; 
+
+            let grandTotal = 0;
+            let totalFactorySum = 0;
+            let totalInvoiceProfit = 0;
+            let productSummaryList = [];
+            let printRowsHTML = '';
+
+            for (let item of activeCart) {
+                let p = products[item.productIdx];
+                if (p.stock < item.qty) {
+                    showCustomModal("خطأ بالمخزن", `الكمية المتوفرة للمادة (${p.name}) غير كافية!`, "danger");
+                    isSubmittingInvoice = false;
+                    return;
+                }
             }
 
-            isSubmittingInvoice = true;
-            const btn = document.getElementById('btn-generate-invoice');
-            const oldBtn = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري حفظ الفاتورة...';
+            for (let item of activeCart) {
+                let p = products[item.productIdx];
+                p.stock -= item.qty;
+                
+                const itemSellingPriceSDG = (item.customPrice !== undefined) ? item.customPrice : calculateDynamicSellingPrice(p);
+                const itemFactoryPriceSDG = calculateDynamicFactoryPrice(p);
+                
+                const itemTotal = itemSellingPriceSDG * item.qty;
+                const itemFactoryTotal = itemFactoryPriceSDG * item.qty;
+                const itemProfit = itemTotal - itemFactoryTotal;
+                
+                grandTotal += itemTotal;
+                totalFactorySum += itemFactoryTotal;
+                totalInvoiceProfit += itemProfit;
+                
+                const fullItemName = p.size ? `${p.name} ${p.size}` : p.name;
+                productSummaryList.push(fullItemName);
 
-            try {
-                const rpcItems = [];
-                let localTotal = 0;
-                let totalFactorySum = 0;
-                let totalInvoiceProfit = 0;
-                let productSummaryList = [];
-                let printRowsHTML = '';
+                printRowsHTML += `
+                    <tr style="border-bottom: 2px solid #000; height: 40px;">
+                        <td style="padding: 10px; border-right: 2px solid #000; text-align: center; font-weight: 900; font-family: monospace; font-size: 15px;">${item.qty}</td>
+                        <td style="padding: 10px; border-right: 2px solid #000; text-align: right; font-weight: 900; font-family: 'Cairo', sans-serif; direction: rtl; font-size: 15px;" dir="rtl">${fullItemName}</td>
+                        <td style="padding: 10px; border-right: 2px solid #000; text-align: center; font-weight: 900; font-family: monospace; font-size: 15px;">${Number(itemSellingPriceSDG).toLocaleString()}</td>
+                        <td style="padding: 10px; text-align: left; font-weight: 900; font-family: monospace; font-size: 15px;">${Number(itemTotal).toLocaleString()}</td>
+                    </tr>
+                `;
 
-                for (const item of activeCart) {
-                    const p = products[item.productIdx];
-                    if (!p || Number(p.stock) < Number(item.qty)) {
-                        throw new Error(`الكمية المتوفرة للمادة (${p?.name || 'غير معروف'}) غير كافية!`);
-                    }
-
-                    const sellingPrice = Number(item.customPrice !== undefined ? item.customPrice : calculateDynamicSellingPrice(p));
-                    const factoryPrice = calculateDynamicFactoryPrice(p);
-                    const itemTotal = sellingPrice * Number(item.qty);
-                    const itemFactoryTotal = factoryPrice * Number(item.qty);
-
-                    rpcItems.push({
-                        product_id: Number(p.id),
-                        quantity: Number(item.qty),
-                        selling_price: sellingPrice
-                    });
-
-                    localTotal += itemTotal;
-                    totalFactorySum += itemFactoryTotal;
-                    totalInvoiceProfit += itemTotal - itemFactoryTotal;
-
-                    const fullItemName = p.size ? `${p.name} ${p.size}` : p.name;
-                    productSummaryList.push(fullItemName);
-                    printRowsHTML += `
-                        <tr style="border-bottom: 2px solid #000; height: 40px;">
-                            <td style="padding: 10px; border-right: 2px solid #000; text-align: center; font-weight: 900; font-family: monospace; font-size: 15px;">${item.qty}</td>
-                            <td style="padding: 10px; border-right: 2px solid #000; text-align: right; font-weight: 900; font-family: 'Cairo', sans-serif; direction: rtl; font-size: 15px;" dir="rtl">${fullItemName}</td>
-                            <td style="padding: 10px; border-right: 2px solid #000; text-align: center; font-weight: 900; font-family: monospace; font-size: 15px;">${Number(sellingPrice).toLocaleString()}</td>
-                            <td style="padding: 10px; text-align: left; font-weight: 900; font-family: monospace; font-size: 15px;">${Number(itemTotal).toLocaleString()}</td>
-                        </tr>`;
+                if (p.id && supabaseClient && navigator.onLine) {
+                    supabaseClient.from('products').update({ stock: p.stock }).eq('id', p.id).then();
                 }
+            }
 
-                const { data: result, error } = await supabaseClient.rpc('create_invoice_transaction', {
-                    p_customer_name: nameVal,
-                    p_customer_phone: phoneVal,
-                    p_customer_location: locVal,
-                    p_payment_method: paymentMethod,
-                    p_note: '',
-                    p_items: rpcItems
-                });
+            const invId = generateUniqueInvoiceId();
+            document.getElementById('inv-header-id').innerText = invId;
 
-                if (error) throw error;
-                const created = Array.isArray(result) ? result[0] : result;
-                if (!created || !created.invoice_number) throw new Error('لم يتم استلام رقم الفاتورة من قاعدة البيانات.');
+            const currentDate = new Date().toISOString().slice(0, 10);
+            const newInvoice = {
+                inv_id: invId,
+                date: currentDate,
+                name: nameVal,
+                phone: phoneVal,
+                location: locVal,
+                product: productSummaryList.join(' + '),
+                qty: String(activeCart.reduce((sum, i) => sum + i.qty, 0)),
+                factory_total: String(totalFactorySum),
+                total: String(grandTotal),
+                profit: String(totalInvoiceProfit),
+                note: ''
+            };
 
-                const invId = created.invoice_number;
-                const currentDate = new Date().toISOString().slice(0, 10);
-                document.getElementById('inv-header-id').innerText = invId;
+            customerDatabase.unshift({ id: invId, ...newInvoice, factoryTotal: totalFactorySum });
+            saveDataToStorage();
 
-                for (const item of activeCart) {
-                    const p = products[item.productIdx];
-                    p.stock -= Number(item.qty);
+            if (supabaseClient && navigator.onLine) {
+                try {
+                    await supabaseClient.from('invoices').insert([newInvoice]);
+                } catch(err) {
+                    offlineQueue.push({ type: 'invoice', data: newInvoice });
+                    updateQueueBadge();
                 }
+            } else {
+                offlineQueue.push({ type: 'invoice', data: newInvoice });
+                updateQueueBadge();
+            }
 
-                const newInvoice = {
-                    id: invId,
-                    date: currentDate,
-                    name: nameVal,
-                    phone: phoneVal,
-                    location: locVal,
-                    product: productSummaryList.join(' + '),
-                    qty: activeCart.reduce((sum, i) => sum + Number(i.qty), 0),
-                    factoryTotal: totalFactorySum,
-                    total: Number(created.invoice_total ?? localTotal),
-                    profit: totalInvoiceProfit,
-                    note: '',
-                    payment_method: paymentMethod,
-                    status: 'completed'
-                };
+            renderInventory();
+            renderPOSCatalog();
+            renderDatabaseTable();
+            renderCalculationsTable();
+            renderClientProfilesTable();
 
-                customerDatabase.unshift(newInvoice);
-                saveDataToStorage();
+            openInvoicePreviewModal(invId, currentDate, nameVal, phoneVal, locVal, printRowsHTML, grandTotal);
 
-                renderInventory();
-                renderPOSCatalog();
-                renderDatabaseTable();
-                renderCalculationsTable();
-                renderClientProfilesTable();
-
-                openInvoicePreviewModal(invId, currentDate, nameVal, phoneVal, locVal, printRowsHTML, newInvoice.total);
-
-                activeCart = [];
-                document.getElementById('invoice-payment-method').value = 'cash';
-                document.getElementById('c-name').value = '';
-                document.getElementById('c-phone').value = '';
-                document.getElementById('c-location').value = '';
-                renderPOSCatalog();
+            activeCart = [];
+            renderPOSCatalog();
+            
+            if(supabaseClient && navigator.onLine) {
                 syncWithCloud();
-            } catch (err) {
-                console.error('Invoice error:', err);
-                showCustomModal("فشل إنشاء الفاتورة", err?.message || "حدث خطأ أثناء حفظ الفاتورة.", "danger");
-            } finally {
-                isSubmittingInvoice = false;
-                btn.disabled = false;
-                btn.innerHTML = oldBtn;
             }
+
+            setTimeout(() => {
+                isSubmittingInvoice = false;
+            }, 1000);
         }
 
         function toggleProductTypeFields() {
@@ -2274,7 +2278,7 @@
                 return;
             }
 
-            const newId = -Date.now();
+            const newId = 'PRD-' + Date.now();
             const newProd = {
                 id: newId,
                 name: name,
@@ -2291,21 +2295,16 @@
 
             if (supabaseClient && navigator.onLine) {
                 try {
-                    const { data: savedProduct, error: productError } = await supabaseClient.from('products').insert([{
+                    await supabaseClient.from('products').insert([{
+                        id: newId,
                         name: name,
                         size: size,
-                        factory_sdg: factoryPrice,
-                        base_sdg: offerPrice,
-                        base_rate: currentUSD_Rate,
-                        stock: stock,
-                        min: 5
-                    }]).select().single();
-                    if (productError) throw productError;
-                    if (savedProduct) {
-                        const localProduct = products.find(p => p.id === newId);
-                        if (localProduct) localProduct.id = savedProduct.id;
-                    }
-                    saveDataToStorage();
+                        factory_sdg: String(factoryPrice),
+                        base_sdg: String(offerPrice),
+                        base_rate: String(currentUSD_Rate),
+                        stock: String(stock),
+                        min: '5'
+                    }]);
                 } catch(err) {
                     offlineQueue.push({ type: 'product_add', data: newProd });
                     updateQueueBadge();
@@ -2451,7 +2450,7 @@
             if(!type || amount <= 0) return;
 
             const newExp = {
-                id: -Date.now(),
+                id: 'EXP-' + Date.now(),
                 type: type,
                 amount: amount,
                 note: note,
@@ -2464,10 +2463,11 @@
             if (supabaseClient && navigator.onLine) {
                 try {
                     await supabaseClient.from('expenses').insert([{
+                        id: newExp.id,
                         type: newExp.type,
-                        amount: newExp.amount,
+                        amount: String(newExp.amount),
                         note: newExp.note,
-                        expense_date: newExp.period
+                        period: newExp.period
                     }]);
                 } catch(err) {
                     offlineQueue.push({ type: 'expense', data: newExp });
@@ -2535,15 +2535,11 @@
                 showCustomModal("تنبيه", "ليس لديك صلاحية حذف المصروف!", "danger");
                 return;
             }
-            showCustomModal("تأكيد الحذف", "هل أنت متأكد من حذف هذا المصروف؟", "danger", async () => {
+            showCustomModal("تأكيد الحذف", "هل أنت متأكد من حذف هذا المصروف؟", "danger", () => {
                 rawExpenses = rawExpenses.filter(e => e.id !== id);
                 saveDataToStorage();
                 renderExpensesTable();
                 updateChartData();
-                if (supabaseClient && navigator.onLine) {
-                    const { error } = await supabaseClient.from('expenses').delete().eq('id', id);
-                    if (error) showCustomModal("تنبيه", "تم الحذف محلياً لكن فشل حذف السجل من السحابة: " + error.message, "danger");
-                }
             });
         };
 
@@ -2562,7 +2558,7 @@
                 const totalLoans = (emp.loans || []).reduce((sum, loan) => sum + Number(loan.amount), 0);
                 const netSalary = emp.salary - totalLoans;
                 const userLinked = (typeof systemUsers !== 'undefined' && systemUsers) ? systemUsers.find(u => u.employee_id === emp.id) : null;
-                const roleDisplay = userLinked ? (userLinked.roleName || 'مستخدم عام') : (emp.jobTitle || 'موظف');
+                const roleDisplay = userLinked ? (userLinked.roleName || 'مستخدم عام') : 'موظف';
 
                 rowsHTML += `
                     <tr class="border-b font-medium text-xs hover:bg-slate-50 transition">
@@ -2599,11 +2595,10 @@
             const jobTitle = document.getElementById('emp-job-title').value.trim();
 
             const newEmp = {
-                id: -Date.now(),
+                id: Date.now().toString(),
                 name,
                 phone,
                 hireDate,
-                jobTitle,
                 salary,
                 loans: []
             };
@@ -2613,20 +2608,14 @@
 
             if (supabaseClient && navigator.onLine) {
                 try {
-                    const { data: savedEmp, error: empError } = await supabaseClient.from('employees').insert([{
+                    await supabaseClient.from('employees').insert([{
+                        id: newEmp.id,
                         name: newEmp.name,
                         phone: newEmp.phone,
                         hire_date: newEmp.hireDate,
-                        job_title: newEmp.jobTitle,
                         salary: newEmp.salary,
                         loans: newEmp.loans
-                    }]).select().single();
-                    if (empError) throw empError;
-                    if (savedEmp) {
-                        const localEmp = employeesDatabase.find(e => e.id === newEmp.id);
-                        if (localEmp) localEmp.id = savedEmp.id;
-                    }
-                    saveDataToStorage();
+                    }]);
                 } catch(err) {
                     offlineQueue.push({ type: 'employee_add', data: { ...newEmp, hire_date: newEmp.hireDate, job_title: newEmp.jobTitle } });
                     updateQueueBadge();
@@ -2692,7 +2681,7 @@
             }
             let rowsHTML = '';
             systemUsers.forEach(user => {
-                const isSystemAdmin = user.roleName === 'admin' || user.role_name === 'admin';
+                const isSystemAdmin = user.email === 'admin@beta.com';
                 const linkedEmployee = (user.employee_id && employeesDatabase) ? employeesDatabase.find(e => String(e.id) === String(user.employee_id)) : null;
                 const displayName = linkedEmployee ? `<span class="text-teal-600 font-bold">${linkedEmployee.name}</span>` : user.email;
 
@@ -2701,7 +2690,7 @@
                         <td class="p-3 text-slate-800 text-right bidi-auto" dir="auto">${displayName} ${!linkedEmployee ? '<span class="text-[10px] bg-slate-100 text-slate-500 px-1 rounded ml-1">غير مربوط</span>' : ''}</td>
                         <td class="p-3 text-slate-600">${user.roleName || 'مستخدم'}</td>
                         <td class="p-3 en-num text-slate-500">${user.created_at ? new Date(user.created_at).toLocaleDateString('en-GB') : '-'}</td>
-                        <td class="p-3 font-black text-indigo-600 en-num">${permissionsCount(user.permissions)}</td>
+                        <td class="p-3 font-black text-indigo-600 en-num">${(user.permissions || []).length}</td>
                         <td class="p-3 text-center flex items-center justify-center gap-2">
                             ${isSystemAdmin ? '<span class="text-xs text-slate-400">حساب أساسي</span>' : `<button onclick="deleteSystemUser('${user.id}')" class="px-2.5 py-1.5 bg-red-50 hover:bg-red-600 text-red-600 hover:text-white rounded-lg font-bold border border-red-200 transition text-xs" title="حذف"><i class="fa-solid fa-trash-can"></i></button>`}
                         </td>
@@ -2782,15 +2771,13 @@
                      throw new Error("هذا الإيميل مسجل مسبقاً!");
                 }
 
-                if (!authData.user) throw new Error('تعذر إنشاء حساب الدخول في Supabase Authentication.');
-
                 // 3. Save permissions to the 'users' table
                 const newUserRecord = {
-                    id: authData.user.id,
+                    id: Date.now().toString(),
                     email: email,
-                    role_name: roleName || 'employee',
-                    permissions: Object.fromEntries(permissions.map(p => [p, true])),
-                    employee_id: employeeId ? Number(employeeId) : null,
+                    role_name: roleName,
+                    permissions: JSON.stringify(permissions),
+                    employee_id: employeeId || null,
                     created_at: new Date().toISOString()
                 };
 
@@ -2836,7 +2823,7 @@
         };
 
         window.editEmployeeSalary = function(empId) {
-            if (!hasPerm('employees.edit')) {
+            if (!isUserAdminOrGM()) {
                 showCustomModal("تنبيه", "ليس لديك صلاحية تعديل الراتب!", "danger");
                 return;
             }
@@ -2886,10 +2873,6 @@
         }
 
         window.deleteLoan = function(empId, loanIndex) {
-            if (!hasPerm('employees.edit')) {
-                showCustomModal("تنبيه", "ليس لديك صلاحية تعديل السلفيات!", "danger");
-                return;
-            }
             const emp = employeesDatabase.find(e => String(e.id) === String(empId));
             if(!emp) return;
             
@@ -2925,10 +2908,6 @@
 
         window.submitLoan = async function(e) {
             e.preventDefault();
-            if (!hasPerm('employees.edit')) {
-                showCustomModal("تنبيه", "ليس لديك صلاحية تعديل بيانات الموظف!", "danger");
-                return;
-            }
             const empId = document.getElementById('loan-emp-id').value;
             const amount = Number(document.getElementById('loan-amount').value);
             const note = document.getElementById('loan-note').value.trim();
@@ -3013,7 +2992,6 @@
                 activeUser = mapEmailToUser(data.session.user.email);
                 document.getElementById('login-modal').classList.add('hidden');
                 applyUserPermissions();
-                await syncWithCloud();
             } else {
                 document.getElementById('login-modal').classList.remove('hidden');
             }
@@ -3026,7 +3004,6 @@
                     activeUser = mapEmailToUser(session.user.email);
                     document.getElementById('login-modal').classList.add('hidden');
                     applyUserPermissions();
-                    syncWithCloud();
                 }
             });
         }
