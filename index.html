@@ -1251,58 +1251,144 @@
         let employeesDatabase = JSON.parse(localStorage.getItem('erp_employees')) || [];
         let systemUsers = JSON.parse(localStorage.getItem('erp_users')) || [];
 
-        function hasPerm(tabId) {
+      function hasPerm(tabId) {
     if (isUserAdminOrGM()) return true;
 
-    const allowedTabs = (activeUser && activeUser.permissions)
+    let allowedTabs = (activeUser && activeUser.permissions)
         ? activeUser.permissions
         : [];
 
-    // صلاحية المخزون تشمل إدارة المخزون
+    // ضمان أن الصلاحيات دائماً Array
+    if (typeof allowedTabs === 'string') {
+        try {
+            allowedTabs = JSON.parse(allowedTabs);
+
+            if (typeof allowedTabs === 'string') {
+                allowedTabs = JSON.parse(allowedTabs);
+            }
+        } catch (e) {
+            allowedTabs = [];
+        }
+    }
+
+    if (!Array.isArray(allowedTabs)) {
+        allowedTabs = [];
+    }
+
+    // صلاحية إدارة المخزون مرتبطة بالمخزون
     if (
         tabId === 'manage-inventory' &&
         (
             allowedTabs.includes('manage-inventory') ||
-            allowedTabs.includes('tab-inventory') ||
-            allowedTabs.includes('inventory')
+            allowedTabs.includes('tab-inventory')
         )
     ) {
         return true;
     }
 
-    return allowedTabs.includes(tabId) ||
-           allowedTabs.includes(tabId.replace('tab-', '')) ||
-           (tabId === 'tab-calc' && allowedTabs.includes('calculations')) ||
-           (tabId === 'tab-db' && allowedTabs.includes('database')) ||
-           (tabId === 'tab-customers' && allowedTabs.includes('customers')) ||
-           (tabId === 'tab-inventory' && allowedTabs.includes('inventory')) ||
-           (tabId === 'tab-employees' && allowedTabs.includes('employees')) ||
-           (tabId === 'tab-expenses' && allowedTabs.includes('expenses'));
-
-        }
+    return (
+        allowedTabs.includes(tabId) ||
+        allowedTabs.includes(tabId.replace('tab-', '')) ||
+        (tabId === 'tab-calc' && allowedTabs.includes('calculations')) ||
+        (tabId === 'tab-db' && allowedTabs.includes('database')) ||
+        (tabId === 'tab-customers' && allowedTabs.includes('customers')) ||
+        (tabId === 'tab-inventory' && allowedTabs.includes('inventory')) ||
+        (tabId === 'tab-employees' && allowedTabs.includes('employees')) ||
+        (tabId === 'tab-expenses' && allowedTabs.includes('expenses'))
+    );
+}
 
         function isUserAdminOrGM() {
             return activeUser && (activeUser.username === 'admin' || activeUser.email === 'admin@beta.com');
         }
 
-        function mapEmailToUser(email) {
-            const dbUser = (systemUsers || []).find(u => u.email === email || u.username === email);
-            if(dbUser) {
-                return {
-                    username: email.split('@')[0],
-                    email: email,
-                    roleName: dbUser.roleName || dbUser.role_name,
-                    permissions: dbUser.permissions,
-                    employee_id: dbUser.employee_id
-                };
-            }
+       function mapEmailToUser(email) {
+    const dbUser = (systemUsers || []).find(
+        u => u.email === email || u.username === email
+    );
 
-            if(email === 'admin@beta.com') return { username: 'admin', email, roleName: 'مدير عام', permissions: ['tab-customers','tab-db','tab-calc','tab-expenses','tab-inventory','tab-employees'] };
-            if(email === 'accountant@beta.com') return { username: 'accountant', email, roleName: 'محاسب', permissions: ['tab-expenses','tab-db','tab-calc'] };
-            if(email === 'store@beta.com') return { username: 'store', email, roleName: 'أمين مخزن', permissions: ['tab-inventory'] };
-            return { username: email.split('@')[0], email, roleName: 'مستخدم', permissions: [] };
+    if (dbUser) {
+
+        let permissions = dbUser.permissions || [];
+
+        // تحويل الصلاحيات إلى Array مهما كان شكلها القادم من Supabase
+        if (typeof permissions === 'string') {
+            try {
+                permissions = JSON.parse(permissions);
+
+                // إذا كانت محفوظة بشكل مزدوج
+                if (typeof permissions === 'string') {
+                    permissions = JSON.parse(permissions);
+                }
+            } catch (e) {
+                permissions = [];
+            }
         }
 
+        if (!Array.isArray(permissions)) {
+            permissions = [];
+        }
+
+        return {
+            username: email.split('@')[0],
+            email: email,
+            roleName: dbUser.roleName || dbUser.role_name || 'مستخدم',
+            permissions: permissions,
+            employee_id: dbUser.employee_id
+        };
+    }
+
+    if (email === 'admin@beta.com') {
+        return {
+            username: 'admin',
+            email: email,
+            roleName: 'مدير عام',
+            permissions: [
+                'tab-customers',
+                'tab-db',
+                'tab-calc',
+                'tab-expenses',
+                'tab-inventory',
+                'tab-employees',
+                'manage-inventory',
+                'manage-expenses',
+                'manage-employees',
+                'admin-panel'
+            ]
+        };
+    }
+
+    if (email === 'accountant@beta.com') {
+        return {
+            username: 'accountant',
+            email: email,
+            roleName: 'محاسب',
+            permissions: [
+                'tab-expenses',
+                'tab-db',
+                'tab-calc'
+            ]
+        };
+    }
+
+    if (email === 'store@beta.com') {
+        return {
+            username: 'store',
+            email: email,
+            roleName: 'أمين مخزن',
+            permissions: [
+                'tab-inventory'
+            ]
+        };
+    }
+
+    return {
+        username: email.split('@')[0],
+        email: email,
+        roleName: 'مستخدم',
+        permissions: []
+    };
+}
         let activeCart = [];
         let activeResetUserIdx = null;
 
