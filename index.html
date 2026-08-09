@@ -1226,10 +1226,7 @@
             { id: '#INV-2023-002', date: '2023-10-02', name: 'أحمد عبدالله', phone: '0123456789', location: 'السوق الكبير', product: 'خزان مياه 5000 لتر أفقي', qty: 1, factoryTotal: 950000, total: 1050000, profit: 100000, note: 'دفعة مقدمة' }
         ];
 
-        const dummyExpenses = [
-            { id: 1, type: 'إيجار المخزن', amount: 150000, note: 'إيجار شهر أكتوبر', period: '2023-10-01' },
-            { id: 2, type: 'نقل وصيانة', amount: 25000, note: 'وقود لعربة النقل', period: '2023-10-02' }
-        ];
+        const dummyExpenses = [];
         
         let customerDatabase = JSON.parse(localStorage.getItem('erp_database'));
         if (!customerDatabase || customerDatabase.length === 0) customerDatabase = dummyInvoices;
@@ -2624,23 +2621,57 @@ window.deleteProduct = function(id) {
             tbody.innerHTML = rowsHTML;
         }
 
-        window.filterExpenses = function() {
+       window.deleteExpense = function(id) {
+    if (!hasPerm('manage-expenses')) {
+        showCustomModal(
+            "تنبيه",
+            "ليس لديك صلاحية حذف المصروف!",
+            "danger"
+        );
+        return;
+    }
+
+    const targetIndex = rawExpenses.findIndex(
+        e => String(e.id) === String(id)
+    );
+
+    if (targetIndex === -1) {
+        showCustomModal(
+            "خطأ",
+            "لم يتم العثور على المصروف المراد حذفه.",
+            "danger"
+        );
+        return;
+    }
+
+    const targetExpense = rawExpenses[targetIndex];
+
+    showCustomModal(
+        "تأكيد الحذف",
+        `هل أنت متأكد من حذف المصروف (${targetExpense.type})؟`,
+        "danger",
+        () => {
+
+            // حذف المصروف
+            rawExpenses.splice(targetIndex, 1);
+
+            // حفظ البيانات
+            saveDataToStorage();
+
+            // تحديث الجدول
             renderExpensesTable();
-        };
 
-        window.deleteExpense = function(id) {
-             if (!hasPerm('manage-expenses')) {
-                showCustomModal("تنبيه", "ليس لديك صلاحية حذف المصروف!", "danger");
-                return;
-            }
-            showCustomModal("تأكيد الحذف", "هل أنت متأكد من حذف هذا المصروف؟", "danger", () => {
-                rawExpenses = rawExpenses.filter(e => e.id !== id);
-                saveDataToStorage();
-                renderExpensesTable();
-                updateChartData();
-            });
-        };
+            // تحديث الرسم البياني
+            updateChartData();
 
+            showCustomModal(
+                "تم الحذف",
+                "تم حذف المصروف بنجاح.",
+                "success"
+            );
+        }
+    );
+};
         window.renderEmployeesTable = function() {
             const tbody = document.getElementById('employees-list');
             if(!tbody) return;
