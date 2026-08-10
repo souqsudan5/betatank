@@ -698,6 +698,10 @@
                                     <input type="checkbox" name="permissions" value="tab-expenses" class="w-4 h-4 text-indigo-600 rounded">
                                     <span class="text-slate-700 font-semibold">المنصرفات والرواتب</span>
                                 </label>
+<label class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg cursor-pointer transition">
+    <input type="checkbox" name="permissions" value="manage-expenses" class="w-4 h-4 text-indigo-600 rounded">
+    <span class="text-slate-700 font-semibold">إدارة المنصرفات (إضافة وحذف)</span>
+</label>
                                 <label class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded-lg cursor-pointer transition">
                                     <input type="checkbox" name="permissions" value="tab-inventory" class="w-4 h-4 text-indigo-600 rounded">
                                     <span class="text-slate-700 font-semibold">المخزون والتسعير</span>
@@ -2630,40 +2634,43 @@ window.deleteProduct = function(id) {
 
             if(!type || amount <= 0) return;
 
-            const newExp = {
-                id: 'EXP-' + Date.now(),
-                type: type,
-                amount: amount,
-                note: note,
-                period: formatDateToYMD()
-            };
-
-            rawExpenses.unshift(newExp);
-            saveDataToStorage();
-
-            if (supabaseClient && navigator.onLine) {
-                try {
-                    await supabaseClient.from('expenses').insert([{
-                        id: newExp.id,
-                        type: newExp.type,
-                        amount: String(newExp.amount),
-                        note: newExp.note,
-                        period: newExp.period
-                    }]);
-                } catch(err) {
-                    offlineQueue.push({ type: 'expense', data: newExp });
-
-                    updateQueueBadge();
-                }
-            } else {
-                offlineQueue.push({ type: 'expense', data: newExp });
-                updateQueueBadge();
+            if (!navigator.onLine || !supabaseClient) {
+                showCustomModal("لا يوجد اتصال", "يجب أن يكون الإنترنت متصلًا حتى يتم حفظ المنصرف.", "danger");
+                return;
             }
 
-            e.target.reset();
-            renderExpensesTable();
-            updateChartData();
-            showCustomModal("تم التسجيل", "تم إضافة المصروف وتحديث الرسم البياني بنجاح!", "success");
+            try {
+                const { data, error } = await supabaseClient.from('expenses').insert([{
+                    type: type,
+                    amount: amount,
+                    note: note,
+                    period: formatDateToYMD(),
+                    date: formatDateToYMD()
+                }]).select().single();
+
+                if (error) {
+                    console.error('Supabase Expense Error:', error);
+                    showCustomModal("فشل الحفظ", "لم يتم حفظ المنصرف في قاعدة البيانات:\n" + error.message, "danger");
+                    return;
+                }
+
+                const newExp = {
+                    id: data.id,
+                    type: data.type,
+                    amount: Number(data.amount) || 0,
+                    note: data.note || '',
+                    period: data.period || data.date || formatDateToYMD()
+                };
+
+                rawExpenses.unshift(newExp);
+                e.target.reset();
+                renderExpensesTable();
+                updateChartData();
+                showCustomModal("تم التسجيل", "تم حفظ المنصرف بنجاح.", "success");
+            } catch(err) {
+                console.error('Expense Error:', err);
+                showCustomModal("خطأ", "حدث خطأ أثناء حفظ المنصرف:\n" + (err.message || err), "danger");
+            }
         }
 
         function renderExpensesTable() {
@@ -2707,57 +2714,87 @@ window.deleteProduct = function(id) {
             tbody.innerHTML = rowsHTML;
         }
 
-       window.deleteExpense = function(id) {
-    if (!hasPerm('manage-expenses')) {
-        showCustomModal(
-            "تنبيه",
-            "ليس لديك صلاحية حذف المصروف!",
-            "danger"
-        );
-        return;
-    }
+        window.deleteExpense = function(id) {
+            // السماح بالحذف لمن لديه صلاحية المنصرفات أو صلاحية إدارة المنصرفات
+            if (!hasPerm('manage-expenses') && !hasPerm('tab-expenses')) {
+                showCustomModal(
+                    "تنبيه",
+                    "ليس لديك صلاحية حذف المصروف!",
+                    "danger"
+                );
+                return;
+            }
 
-    const targetIndex = rawExpenses.findIndex(
-        e => String(e.id) === String(id)
-    );
+            const targetIndex = rawExpenses.findIndex(
+                e => String(e.id) === String(id)
+            );
 
-    if (targetIndex === -1) {
-        showCustomModal(
-            "خطأ",
-            "لم يتم العثور على المصروف المراد حذفه.",
-            "danger"
-        );
-        return;
-    }
+            if (targetIndex === -1) {
+                showCustomModal(
+                    "خطأ",
+                    "لم يتم العثور على المصروف المراد حذفه.",
+                    "danger"
+                );
+                return;
+            }
 
-    const targetExpense = rawExpenses[targetIndex];
-
-    showCustomModal(
-        "تأكيد الحذف",
-        `هل أنت متأكد من حذف المصروف (${targetExpense.type})؟`,
-        "danger",
-        () => {
-
-            // حذف المصروف
-            rawExpenses.splice(targetIndex, 1);
-
-            // حفظ البيانات
-            saveDataToStorage();
-
-            // تحديث الجدول
-            renderExpensesTable();
-
-            // تحديث الرسم البياني
-            updateChartData();
+            const targetExpense = rawExpenses[targetIndex];
 
             showCustomModal(
-                "تم الحذف",
-                "تم حذف المصروف بنجاح.",
-                "success"
+                "تأكيد الحذف",
+                `هل أنت متأكد من حذف المصروف (${targetExpense.type})؟`,
+                "danger",
+                async () => {
+                    // الحذف من قاعدة البيانات يحتاج اتصالًا بالإنترنت
+                    if (!navigator.onLine || !supabaseClient) {
+                        showCustomModal(
+                            "لا يوجد اتصال",
+                            "يجب أن يكون الإنترنت متصلًا حتى يتم حذف المصروف.",
+                            "danger"
+                        );
+                        return;
+                    }
+
+                    try {
+                        // حذف السجل من Supabase أولًا
+                        const { error } = await supabaseClient
+                            .from('expenses')
+                            .delete()
+                            .eq('id', targetExpense.id);
+
+                        if (error) {
+                            console.error('Supabase Delete Expense Error:', error);
+                            showCustomModal(
+                                "فشل الحذف",
+                                "لم يتم حذف المصروف من قاعدة البيانات:\n" + error.message,
+                                "danger"
+                            );
+                            return;
+                        }
+
+                        // بعد نجاح الحذف من Supabase نحذفه من القائمة الحالية
+                        rawExpenses.splice(targetIndex, 1);
+
+                        // تحديث الجدول والرسم البياني
+                        renderExpensesTable();
+                        updateChartData();
+
+                        showCustomModal(
+                            "تم الحذف",
+                            "تم حذف المصروف نهائيًا من قاعدة البيانات.",
+                            "success"
+                        );
+                    } catch (err) {
+                        console.error('Expense Delete Error:', err);
+                        showCustomModal(
+                            "خطأ",
+                            "حدث خطأ أثناء حذف المصروف:\n" + (err.message || err),
+                            "danger"
+                        );
+                    }
+                }
             );
-        }
-    );
-};
+        };
         window.renderEmployeesTable = function() {
             const tbody = document.getElementById('employees-list');
             if(!tbody) return;
